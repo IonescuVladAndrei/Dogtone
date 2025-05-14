@@ -4,6 +4,7 @@ import { PASSWORD_REGEXP } from "../common/password-regex.js";
 import { NAME_LEN, NAME_REGEXP } from "../common/name-regex.js";
 
 const ENCR_KEY = "RJHjFwbt2zwit1F";
+// Should be stored in a .env file, but this is a backend simulator
 
 /**
  * Function that encrypts a string.
