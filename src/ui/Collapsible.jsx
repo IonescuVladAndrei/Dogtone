@@ -1,6 +1,7 @@
 import { useRef, useState } from "react";
 import VertArrowButton from "./buttons/VertArrowButton";
 import styled, { css } from "styled-components";
+import { memo } from "react";
 
 const OutsideBox = styled.div`
 	background-color: var(--color-grey-0);
@@ -20,7 +21,7 @@ const TextBox = styled.div`
 	display: flex;
 	gap: 1rem;
 	align-items: center;
-    justify-content: space-between;
+	justify-content: space-between;
 `;
 
 const TextP = styled.p`
@@ -82,4 +83,4 @@ function Collapsible({ text, children }) {
 	);
 }
 
-export default Collapsible;
+export default memo(Collapsible);

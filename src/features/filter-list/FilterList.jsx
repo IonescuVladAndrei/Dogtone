@@ -1,13 +1,12 @@
-import styled, { css } from "styled-components";
-import { useAppEdit } from "../app-context/AppContext";
-import ListItem from "../../ui/ListItem";
-import { FILTER_CONTRAST_RANGE, FILTER_SATURATION_RANGE, FiltersType } from "./filtersEnum";
 import { MathJax, MathJaxContext } from "better-react-mathjax";
+import styled from "styled-components";
+import ListItem from "../../ui/ListItem";
 import Slider from "../../ui/Slider";
-
-const mathJaxConfig = {
-	loader: { load: ["input/tex", "output/chtml"] },
-};
+import { useAppEdit } from "../app-context/AppContext";
+import { CallBox, CallP, FormulaBox, VarSpan } from "./filters/FilterStyling";
+import SaturationInfo from "./filters/SaturationInfo";
+import ContrastInfo from "./filters/ContrastInfo";
+import { FILTER_CONTRAST_RANGE, FILTER_SATURATION_RANGE, FiltersType } from "./filtersEnum";
 
 const StyledList = styled.ul`
 	display: flex;
@@ -25,54 +24,7 @@ const StyledHeading = styled.h2`
 	color: var(--color-brand-600);
 `;
 
-const CallBox = styled.div`
-	display: flex;
-	flex-direction: column;
-	gap: 1rem;
-`;
-
-const CallP = styled.p`
-	color: var(--color-grey-500);
-	line-height: 1.3;
-`;
-
-const FormulaBox = styled.div`
-	display: flex;
-	justify-content: center;
-	margin-top: 0.5rem;
-
-	${(props) =>
-		props.$isSmallScreen &&
-		css`
-			@media (max-width: ${(props) => props.$maxWidth}) {
-				font-size: 1.1rem;
-			}
-		`}
-`;
-
-const SmallScreenBox = styled.div`
-	${(props) =>
-		props.$isSmallScreen
-			? css`
-					display: none;
-
-					@media (max-width: ${(props) => props.$maxWidth}) {
-						display: block;
-					}
-			  `
-			: css`
-					display: block;
-
-					@media (max-width: ${(props) => props.$maxWidth}) {
-						display: none;
-					}
-			  `}
-`;
-
-const VarSpan = styled.span`
-	color: var(--color-brand-600);
-	font-weight: 500;
-`;
+const mathJaxConfig = { loader: { load: ["input/tex", "output/chtml"] } };
 
 function FilterList() {
 	const { filter, setFilter, filterVal, setFilterVal } = useAppEdit();
@@ -195,53 +147,7 @@ function FilterList() {
 					isChecked={filter === FiltersType.CONTRAST}
 					onClick={() => setFilter(FiltersType.CONTRAST, 0)}
 					withColl={true}
-					collComponent={
-						<CallBox>
-							<CallP>
-								This contrast adjustment method uses a scaling factor to stretch or compress the distance between pixel values and the
-								midtone (128). A higher filterVal increases contrast by making bright areas brighter and dark areas darker, while a
-								negative value decreases contrast, flattening the image. The formula ensures all output values stay within the 0-255
-								range.
-							</CallP>
-							<CallP>
-								First the factor is determined based on <VarSpan>C</VarSpan> (value between -255 and 255):
-							</CallP>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>
-									{"\\( \\color{#1b4a66}{\\text{factor}} =  \\frac{259 \\times (C + 255)}{255 \\times (259 - C)} \\)"}
-								</MathJax>
-							</FormulaBox>
-							<CallP>Then following formula is applied to each pixel:</CallP>
-
-							<SmallScreenBox $isSmallScreen={false} $maxWidth={"500px"}>
-								<FormulaBox $isSmallScreen={true} $maxWidth={"550px"} $withOverflow={true}>
-									<MathJax>
-										{
-											"\\( \\color{#1b4a66}{\\text{NewValue} = \\text{clamp}\\left( \\text{factor} \\times (\\text{OldValue} - 128) + 128 \\right)} \\)"
-										}
-									</MathJax>
-								</FormulaBox>
-							</SmallScreenBox>
-
-							<SmallScreenBox $isSmallScreen={true} $maxWidth={"500px"}>
-								<FormulaBox $isSmallScreen={true} $maxWidth={"550px"} $withOverflow={true}>
-									<MathJax>{"\\( \\color{#1b4a66}{\\text{NewValue} = } \\)"}</MathJax>
-								</FormulaBox>
-
-								<FormulaBox $isSmallScreen={true} $maxWidth={"550px"} $withOverflow={true}>
-									<MathJax>
-										{
-											"\\( \\color{#1b4a66}{\\text{clamp}\\left( \\text{factor} \\times (\\text{OldValue} - 128) + 128 \\right)} \\)"
-										}
-									</MathJax>
-								</FormulaBox>
-							</SmallScreenBox>
-
-							<CallP>
-								Where <VarSpan>clamp</VarSpan> function ensures that NewValue remains between 0 and 255.
-							</CallP>
-						</CallBox>
-					}
+					collComponent={<ContrastInfo />}
 				>
 					<SliderBox>
 						<Slider min={FILTER_CONTRAST_RANGE.min} max={FILTER_CONTRAST_RANGE.max} value={filterVal} setValue={setFilterVal} />
@@ -256,130 +162,7 @@ function FilterList() {
 					isChecked={filter === FiltersType.SATURATION}
 					onClick={() => setFilter(FiltersType.SATURATION, 100)}
 					withColl={true}
-					collComponent={
-						<CallBox>
-							<CallP>
-								Saturation is adjusted by converting each pixel's color from RGB to HSL (Hue, Saturation, Lightness), modifying the
-								saturation (S) component, and converting it back to RGB.
-							</CallP>
-							<CallP>
-								First the factor is determined based on <VarSpan>S</VarSpan> (value between 0 and 200):
-							</CallP>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>
-									{"\\( \\color{#1b4a66}{\\text{factor}} =  \\frac{S}{100} \\)"}
-								</MathJax>
-							</FormulaBox>
-							<CallP>Then each pixel is converted from RGB to HSL using the following formula:</CallP>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>
-									{"\\( \\color{#1b4a66}{ r' = \\frac{r}{255},\\quad g' = \\frac{g}{255},\\quad b' = \\frac{b}{255} } \\)"}
-								</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ \\text{max} = \\max(r', g', b') } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ \\text{min} = \\min(r', g', b') } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ l = \\frac{\\text{max} + \\text{min}}{2} } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ \\text{if } \\text{max} = \\text{min}:\\quad s = 0,\\quad h = 0 } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ \\text{Else:} } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ d = \\text{max} - \\text{min} } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>
-									{"\\( \\color{#1b4a66}{s = " +
-										"\\begin{cases} " +
-										"\\frac{d}{2 - \\text{max} - \\text{min}}, & \\text{if } l > 0.5 \\\\ " +
-										"\\frac{d}{\\text{max} + \\text{min}}, & \\text{if } l \\leq 0.5 " +
-										"\\end{cases}} \\)"}
-								</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"550px"}>
-								<MathJax>
-									{"\\( \\color{#1b4a66}{h = " +
-										"\\begin{cases} " +
-										"\\frac{g' - b'}{d} + (6 \\text{ if } g' < b' \\text{ else } 0), & \\text{if } \\text{max} = r' \\\\ " +
-										"\\frac{b' - r'}{d} + 2, & \\text{if } \\text{max} = g' \\\\ " +
-										"\\frac{r' - g'}{d} + 4, & \\text{if } \\text{max} = b' " +
-										"\\end{cases}} \\)"}
-								</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ h = \\frac{h}{6} } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>{"\\( \\color{#1b4a66}{s = s \\times \\text{factor}} \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>{"\\( \\color{#1b4a66}{s = \\min(1,\\max(0, s))} \\)"}</MathJax>
-							</FormulaBox>
-							<CallP>Then each pixel is converted from HSL back RGB using the following formula:</CallP>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax>{"\\( \\color{#1b4a66}{q = l \\times (1 + s) \\quad \\text{(if } l < 0.5 \\text{)}} \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{q = l + s - l \\times s \\quad \\text{(if } l \\geq 0.5 \\text{)}} \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{r = \\text{hue2rgb}(p, q, h + \\frac{1}{3})} \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{g = \\text{hue2rgb}(p, q, h)} \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{b = \\text{hue2rgb}(p, q, h - \\frac{1}{3})} \\)"}</MathJax>
-							</FormulaBox>
-							<CallP>
-								Where <VarSpan>hue2rgb</VarSpan> is calculated using:
-							</CallP>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"400px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ t = t < 0 ? t + 1 : t > 1 ? t - 1 : t } \\)"}</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"400px"}>
-								<MathJax>
-									{
-										"\\( \\color{#1b4a66}{ \\text{if} \\; t < \\frac{1}{6}, \\; \\text{Return} \\; p + (q - p) \\times 6 \\times t } \\)"
-									}
-								</MathJax>
-							</FormulaBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"400px"}>
-								<MathJax>
-									{"\\( \\color{#1b4a66}{ \\text{if} \\; \\frac{1}{6} \\leq t < \\frac{1}{2}, \\; \\text{Return} \\; q } \\)"}
-								</MathJax>
-							</FormulaBox>
-							<SmallScreenBox $isSmallScreen={false} $maxWidth={"350px"}>
-								<FormulaBox $isSmallScreen={true} $maxWidth={"500px"}>
-									<MathJax>
-										{
-											"\\( \\color{#1b4a66}{ \\text{if} \\; \\frac{1}{2} \\leq t < \\frac{2}{3}, \\; \\text{Return} \\; p + (q - p) \\times (\\frac{2}{3} - t) \\times 6 } \\)"
-										}
-									</MathJax>
-								</FormulaBox>
-							</SmallScreenBox>
-							<SmallScreenBox $isSmallScreen={true} $maxWidth={"350px"}>
-								<FormulaBox $isSmallScreen={true} $maxWidth={"500px"}>
-									<MathJax>{"\\( \\color{#1b4a66}{ \\text{if} \\; \\frac{1}{2} \\leq t < \\frac{2}{3}, } \\)"}</MathJax>
-								</FormulaBox>
-								<FormulaBox $isSmallScreen={true} $maxWidth={"500px"}>
-									<MathJax>
-										{"\\( \\color{#1b4a66}{ \\text{Return} \\; p + (q - p) \\times (\\frac{2}{3} - t) \\times 6 } \\)"}
-									</MathJax>
-								</FormulaBox>
-							</SmallScreenBox>
-							<FormulaBox $isSmallScreen={true} $maxWidth={"400px"}>
-								<MathJax> {"\\( \\color{#1b4a66}{ \\text{Otherwise, Return} \\; p } \\)"}</MathJax>
-							</FormulaBox>
-						</CallBox>
-					}
+					collComponent={<SaturationInfo />}
 				>
 					<SliderBox>
 						<Slider min={FILTER_SATURATION_RANGE.min} max={FILTER_SATURATION_RANGE.max} value={filterVal} setValue={setFilterVal} />

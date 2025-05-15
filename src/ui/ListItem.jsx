@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 import RadioButton from "./buttons/RadioButton";
 import Collapsible from "./Collapsible";
+import { memo } from "react";
 
 const StyledLi = styled.li`
 	display: flex;
@@ -81,4 +82,4 @@ function ListItem({ label, description, onClick, isChecked, withColl = false, co
 	);
 }
 
-export default ListItem;
+export default memo(ListItem);
