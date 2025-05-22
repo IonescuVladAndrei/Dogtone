@@ -3,11 +3,11 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { Toaster } from "react-hot-toast";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
-import HomePage from "./pages/Homepage";
+import HomePage from "./pages/HomePage";
 import LogInPage from "./pages/LogInPage";
+import PageNotFound from "./pages/PageNotFound";
 import SignUpPage from "./pages/SignUpPage";
 import GlobalStyles from "./styles/GlobalStyles";
-import PageNotFound from "./pages/PageNotFound";
 
 const queryClient = new QueryClient({
 	defaultOptions: {

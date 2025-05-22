@@ -45,6 +45,9 @@ const GlobalStyles = createGlobalStyle`
   --color-green-500: #228b22; 
   --color-green-200: #449964;
 
+  /* Purple */
+  --color-purple-600: #3c096c;
+
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.24);
   --shadow-md: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px;
   --shadow-lg: rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px, rgba(0, 0, 0, 0.35) 0px 5px 15px;

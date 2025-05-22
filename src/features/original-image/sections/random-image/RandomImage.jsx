@@ -21,7 +21,7 @@ const OutsideBox = styled.div`
 		padding: 1.2rem 2rem;
 	}
 
-	@media (max-width: 690px) {
+	@media (max-width: 720px) {
 		width: 100%;
 		overflow-x: hidden;
 	}
@@ -41,7 +41,7 @@ const ButtonBox = styled.div`
 `;
 
 const SmallScreenBox = styled.div`
-	@media (max-width: 690px) {
+	@media (max-width: 720px) {
 		width: 100%;
 		overflow-x: auto;
         padding-bottom: 0.4rem;

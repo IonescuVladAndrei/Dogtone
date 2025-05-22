@@ -7,6 +7,7 @@ import OriginalImage from "../features/original-image/OriginalImage";
 import Processing from "../features/processing/Processing";
 import Footer from "../ui/Footer";
 import MainHeading from "../ui/MainHeading";
+import Education from "../features/education/Education";
 
 const AppLayout = styled.div`
 	height: 100dvh;
@@ -31,6 +32,12 @@ const ChildContainer = styled.div`
 	grid-template-columns: 1fr 1fr;
 	row-gap: 2rem;
 
+	@media (min-width: 1481px) {
+		& > :nth-child(5) {
+			grid-column: span 2;
+		}
+	}
+
 	@media (max-width: 1480px) {
 		grid-template-columns: 1fr;
 
@@ -49,6 +56,10 @@ const ChildContainer = styled.div`
 		& > :nth-child(4) {
 			order: 4;
 		}
+
+		& > :nth-child(5) {
+			order: 5;
+		}
 	}
 `;
 
@@ -64,6 +75,7 @@ function HomePage() {
 						<FilterList />
 						<OriginalImage />
 						<Processing />
+						<Education />
 					</ChildContainer>
 				</MainContainer>
 				<Footer />

@@ -34,7 +34,7 @@ const PrimaryButton = styled.button`
 	&:disabled {
 		background-color: var(--color-grey-0);
 		border: 1px solid var(--color-grey-200);
-		color: var(--color-grey-400);
+		color: var(--color-grey-300);
 	}
 `;
 
@@ -125,9 +125,35 @@ const PasswordButton = styled.button`
 	}
 `;
 
+const SecondaryButton = styled.button`
+	font-size: 1.4rem;
+	padding: 1.2rem 1.6rem;
+	font-weight: 500;
+
+	border: none;
+	border-radius: var(--border-radius-sm);
+	box-shadow: var(--shadow-sm);
+
+	color: var(--color-grey-700);
+	background: var(--color-grey-0);
+	border: 1px solid var(--color-grey-200);
+
+	&:hover&:not(:disabled) {
+		background-color: var(--color-grey-50);
+	}
+
+	&:focus {
+		outline: none;
+	}
+
+	&:disabled {
+		color: var(--color-grey-300);
+	}
+`;
+
 /**
  * @typedef {Object} Button
- * @property {'primary' | 'transparent' | 'space' | 'password'} type - The type of button.
+ * @property {'primary' | 'transparent' | 'space' | 'password' | 'secondary'} type - The type of button.
  */
 
 /**
@@ -142,6 +168,8 @@ function Button({ type, children, ...props }) {
 	if (type === "password") return <PasswordButton {...props}>{children}</PasswordButton>;
 
 	if (type === "primary") return <PrimaryButton {...props}>{children}</PrimaryButton>;
+
+	if (type === "secondary") return <SecondaryButton {...props}>{children}</SecondaryButton>;
 
 	return <button {...props}>{children}</button>;
 }
