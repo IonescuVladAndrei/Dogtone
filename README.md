@@ -57,22 +57,37 @@ This is a university project with the following requirements:
 
 The homepage is divided into two main sections: the upper section, where users select an image and choose a filter to apply, and the lower section, which handles image loading and displays the processed result.
 
-| Upper |
+| Upper Section |
 |-------------|
 | ![Upper_Section Screenshot](https://drive.google.com/uc?export=view&id=1yBjt2FNmpgyeTrJQyRnIWLmSi_iIqS8j) | 
 
-| Lower |
+| Lower Section |
 |-------------------|
-| ![Lower_Section Screenshot](https://drive.google.com/uc?export=view&id=1MYOTADAe4R1MQHajXoLZEtGTU-ZDyu1J) |
+| ![Lower_Section Screenshot](https://drive.google.com/uc?export=view&id=17wn2yuRvz-D6RC5N9KWF_QyS_cDwdTzQ) |
+
 
 The upper section incorporates UI principles of learnability and efficiency. Experienced users can quickly select a filter for fast interaction, while new users can explore a collapsible section to learn about each process. This collapsible enhances learnability by providing explanations styled with the better-react-mathjax library, which formats the mathematical formulas used in image processing.<br>
 The Contrast and Saturation filters use a slider paired with a numeric input to allow precise adjustment of each filter's value. The two inputs are synchronized, enabling users to either drag the slider or type a value directly for fine control over the image appearance. The numeric input was designed to adhere to the UI safety principle. If a user enters a non-numeric value, it reverts to the last valid entry. If the value exceeds the allowed range, it adjusts to the nearest valid limit. This behavior is implemented using the onBlur event.
 
-![Filters Screenshot](https://drive.google.com/uc?export=view&id=1KhulA2vIdwjSxwh-wkwMLyVVNprOrPrc)
 
-The lower section is divided into two parts: one displaying the original image and the other showing the processed version together with processing time and a download button. This layout helps users easily compare and identify the differences between the two images.
+| Upper Section |
+|-------------------|
+| ![Filters Screenshot](https://drive.google.com/uc?export=view&id=1KhulA2vIdwjSxwh-wkwMLyVVNprOrPrc) |
 
-![Lower_Section Screenshot](https://drive.google.com/uc?export=view&id=1P_0fp9BmHm-acpxv5mHqyinnS7ea_MkF)
+The lower section is divided into two rows: 
+- one displaying the original and the processed image together with processing time and a download button (this layout helps users easily compare and identify the differences between the two images.)
+- one for displaying the R,G,B values of pixels
+
+| Lower Section |
+|-------------------|
+| ![Lower_Section Screenshot](https://drive.google.com/uc?export=view&id=1P_0fp9BmHm-acpxv5mHqyinnS7ea_MkF) |
+
+This part of the page is for educational purposes and will render a matrix of squares where upon hovering over (or clicking on mobile) will display the individual red, green and blue numerical values.
+In the description, the user is informed that at first they need to fetch a random dog image, choose the starting indexes (which are optional and depend on the size of the image and the matrix) and then press the run button.
+Mobile mode will render a 4x4 matrix instead of 10x10 which will improve performance. The layout on small screens will still adapt correctly even when mobile mode is not active, it's just that the animation will be harder to follow. 
+The animation is a cycle of highlighting each pixel from the initial image, replacing the variables and then highlighting each pixel from the final image.
+
+https://github.com/user-attachments/assets/23adaab4-6523-427c-99ba-bb1363a3621a
 
 For an image to be processed, it first needs to be fetched and loaded. The process button is disabled until the input image is successfully loaded, while the download button is available after the processing. 
 
