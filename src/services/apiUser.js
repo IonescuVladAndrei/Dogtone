@@ -5,7 +5,7 @@ const BASE_URL = "http://localhost:6969";
 /**
  * Function which throws en error
  *
- * @param {object} err - The error object which should be nested object.
+ * @param {object} err - The error object which should be a nested object.
  * @param {string} genericMessage - Generic error message in case err.response.data.error is undefined.
  */
 export function throwErr(err, genericMessage) {
